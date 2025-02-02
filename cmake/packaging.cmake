@@ -14,7 +14,9 @@ endif()
 
 set (BS "") # Bit Size
 if ( NOT APPLE )
-  if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+    set (BS Arm64)
+  elseif ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
     set (BS 64)
   else()
     set (BS 32)

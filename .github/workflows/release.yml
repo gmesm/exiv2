@@ -18,7 +18,12 @@ on:
 jobs:
   Linux:
     name: 'Build Linux Release'
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.runner.os }}
+    strategy:
+      matrix:
+        runner:
+          - { os: ubuntu-22.04, arch: 64   }
+          - { os: ubuntu-22.04-arm, arch: arm64 }
     steps:
       - uses: actions/checkout@v4
 
@@ -48,7 +53,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: exiv2-linux64
+          name: exiv2-linux${{ matrix.runner.arch }}
           path: ./build/exiv2-*.tar.gz
           if-no-files-found: error
           retention-days: 1
@@ -223,5 +228,6 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           files: |
             ./exiv2-linux64/exiv2-*
+            ./exiv2-linuarm64/exiv2-*
             ./exiv2-macos/exiv2-*
             ./exiv2-win/exiv2-*
